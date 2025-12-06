@@ -92,3 +92,45 @@ with tab2:
             st.warning("No data found for these filters.")
     else:
         st.info("Database is empty. Go to 'Data Drop' to add your first price!")
+        # ... (rest of the script remains the same)
+
+# --- TAB 1: DATA ENTRY ---
+with tab1:
+    st.header("Add Competitor Price")
+    with st.form("price_form"):
+        # The Inputs
+        col1, col2 = st.columns(2)
+        provider = col1.selectbox("Brand", [
+            # ... (your 20 providers list)
+        ])
+        fuel = col2.selectbox("Fuel Type", ["Electricity", "Gas"])
+        
+        state = st.selectbox("State", ["VIC", "NSW", "QLD", "SA"])
+        zone = st.radio("Zone", ["Metro", "Regional"], horizontal=True)
+        
+        # ADD THIS NEW FIELD (or similar)
+        annual_usage = st.number_input("Annual Usage (kWh/MJ)", min_value=1000.0, step=100.0) 
+        
+        monthly_cost = st.number_input("Monthly Cost ($)", min_value=0.0, step=0.1)
+        
+        # Submit Button
+        submitted = st.form_submit_button("💾 Save Price")
+        
+        if submitted:
+            # Prepare data package
+            new_data = {
+                "date": pd.Timestamp.now(),
+                "provider": provider,
+                "fuel": fuel,
+                "state": state,
+                "zone": zone,
+                "annual_usage": annual_usage, # NEW FIELD
+                "monthly": monthly_cost,
+                "yearly": monthly_cost * 12
+            }
+            # Send to Firebase
+            db.collection("prices").add(new_data)
+            st.success(f"Saved: {provider} - ${monthly_cost}/mo")
+
+# ... (rest of the script remains the same)
+
