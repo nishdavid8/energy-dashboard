@@ -23,7 +23,7 @@ tab1, tab2 = st.tabs(["📝 Data Drop", "📈 Market Dashboard"])
 # --- TAB 1: DATA ENTRY ---
 with tab1:
     st.header("Add Competitor Price")
-    with with st.form("price_input_form", key='price_input_form'):
+    with st.form("price_input_form", key='price_input_form'):
         # The Inputs
         col1, col2 = st.columns(2)
         provider = col1.selectbox("Brand", [
